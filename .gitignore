@@ -1,0 +1,6 @@
+.vscode
+__pycache__
+
+# in work1
+work1/flappy-bird
+work1/QLearning.ipynb
