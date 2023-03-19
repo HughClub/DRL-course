@@ -17,17 +17,16 @@ class BespokeAgent:
         return action # 返回动作
     def learn(self, *args):
         pass
-env = gym.make("MountainCar-v0", render_mode="human")
-agent = BespokeAgent(env)
 
-def play(env:gym.Env, agent, seed:int, train:bool=False):
+def play_car(env:gym.Env, agent, seed:int,rende:bool=True, train:bool=False):
     episode_reward = 0
     ob = env.reset(seed=seed)
     while True:
-        env.render()
+        if rende:
+            env.render()
         action = agent.decide(ob)
         next, reward, term, trunc, _ = env.step(action)
-        episode_reward += reward
+        episode_reward += reward # type: ignore
         if train:
             agent.learn()
         if term or trunc:
@@ -35,37 +34,22 @@ def play(env:gym.Env, agent, seed:int, train:bool=False):
         ob = next
     return episode_reward
 
-
-
-reward = play(env, agent, 82) # reward=-83
-print(f"{reward=}")
-env.close()
-
-
 # get the max reward test seed in [0, 1024)
-def test_env():
+def test_car(topRound:int=1024):
     env = gym.make("MountainCar-v0")
     agent = BespokeAgent(env)
 
-    def iplay(env:gym.Env, agent, seed:int, train:bool=False):
-        episode_reward = 0
-        ob = env.reset(seed=seed)
-        while True:
-            action = agent.decide(ob)
-            next, reward, term, trunc, _ = env.step(action)
-            episode_reward += reward
-            if train:
-                agent.learn()
-            if term or trunc:
-                break
-            ob = next
-        return episode_reward
-
     turn, maxr = 0, -200
-    for i in range(1024):
-        r = iplay(env, agent, i)
+    for i in range(topRound):
+        r = play_car(env, agent, i, False)
         if r > maxr:
             maxr, turn = r, i
     print(maxr, turn)
 
-# test_env() # -83.0 82
+if __name__ == "__main__":
+    # test_env() # -83.0 82
+    env = gym.make("MountainCar-v0", render_mode="human")
+    agent = BespokeAgent(env)
+    reward = play_car(env, agent, 82) # reward=-83
+    print(f"{reward=}")
+    env.close()
