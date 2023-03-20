@@ -41,17 +41,17 @@ class Walker(BaseAgent):
         with open(file, "wb") as fd:
             pickle.dump((self.table, self.gamma), fd)
 
-def main(round:int=32):
-    train_env = gym.make("CliffWalking-v0")
+def main(env_name:str, round:int=100, seed:int=42, interactive:bool=True)->float:
+    train_env = gym.make(env_name)
     agent = Walker(train_env.observation_space.n, train_env.action_space.n)
-    train(agent, train_env, round, interval=4)
+    train(agent, train_env, round, seed, verbose=interactive)
     train_env.close()
 
-    test_env = gym.make("CliffWalking-v0", render_mode="human")
-    print("test reward:", test(agent, test_env))
+    test_env = gym.make(env_name, render_mode="human") if interactive else train_env
+    tre = test(agent, test_env, seed, interactive)
     test_env.close()
-
+    return tre
 
 if __name__ == "__main__":
     # print(cheater())
-    main(36)
+    main("CliffWalking-v0", 36)

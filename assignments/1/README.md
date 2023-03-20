@@ -10,6 +10,12 @@ farama-gym: 使用 gym 环境的代码(Python3.10+gymnasium)
 - [x] 实现 CartPole | MountainCar 的强化学习算法 (**MountainCar** env:gym [code](./farama-gym/agent_car.py))
 - [x] 选择 Gym 其他环境 完成强化学习算法 (**Taxi-v3** env:gym [code](farama-gym/taxi_v3.py))
 
+目前基于 `CliffWalking` 实现的算法 在一些类似的简单环境下可以通用
+- `Acrobot-v1`
+- `CartPole-v1` 需要针对`MountainCar`的类实现做初始化坐标映射的修改 下文有方案
+- `Taxi-v3` 直接应用
+- `FrozenLake-v1` ~~我觉得是这个环境的reward有点问题 每一步有负分就好学一点~~
+
 ## CliffWalking
 
 (openai-gym) 基于之前的QLearning.ipynb文件 重新整理代码 删去不需要的依赖 同时增加了最后的GUI展示代码
