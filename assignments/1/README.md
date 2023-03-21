@@ -8,13 +8,15 @@ farama-gym: 使用 gym 环境的代码(Python3.10+gymnasium)
 - [x] 复现 CartPole & MountainCar (env: openai-gym/gym)
 - [x] 复现 CliffWalking 并调参查看效果 (env: openai-gym/gym)
 - [x] 实现 CartPole | MountainCar 的强化学习算法 (**MountainCar** env:gym [code](./farama-gym/agent_car.py))
-- [x] 选择 Gym 其他环境 完成强化学习算法 (**Taxi-v3** env:gym [code](farama-gym/taxi_v3.py))
+- [x] 选择 Gym 其他环境 完成强化学习算法 (**Taxi-v3** env:gym [code](farama-gym/taxi_v3.py) **FrozenLake-v1-RewardCustom** env:gym [code](farama-gym/FrozenLakeV2.py))
 
 目前基于 `CliffWalking` 实现的算法 在一些类似的简单环境下可以通用
 - `Acrobot-v1`
 - `CartPole-v1` 需要针对`MountainCar`的类实现做初始化坐标映射的修改 下文有方案
 - `Taxi-v3` 直接应用
-- `FrozenLake-v1` ~~我觉得是这个环境的reward有点问题 每一步有负分就好学一点~~
+- `FrozenLake-v1`
+  - ~~我觉得是原本环境的reward有点问题 每一步有负分就好学一点~~
+  - 对于修改奖励之后的环境 能够在30回合收敛
 
 ## CliffWalking
 
@@ -52,6 +54,24 @@ Box([-4.8000002e+00 -3.4028235e+38 -4.1887903e-01 -3.4028235e+38], [4.8000002e+0
 ## 自选环境
 
 - [Taxi-v3](farama-gym/taxi_v3.py): 跟CliffWalking一样的逻辑
+- [FrozenLake-v1](farama-gym/FrozenLakeV2.py): 指修改了奖励 逻辑同上
 
 ![Taxiv3](Taxi-v3-test.png)
 该环境测试图
+
+![FronzenLakev1](FrozenLake-v1-Custom.png)
+该环境测试图
+
+输出
+```
+round: 0         reward: -13.0
+round: 29        reward: -1.0
+4.0 # test reward
+```
+
+```
+Reward schedule:
+- Reach goal:   +1     ->   +10
+- Reach hole:    0     ->   -10
+- Reach frozen:  0     ->   -1
+```
