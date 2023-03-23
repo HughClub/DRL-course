@@ -41,13 +41,13 @@ class Walker(BaseAgent):
         with open(file, "wb") as fd:
             pickle.dump((self.table, self.gamma), fd)
 
-def main(env_name:str, round:int=100, seed:int=42, interactive:bool=True)->float:
-    train_env = gym.make(env_name)
+def main(env_name:str, round:int=100, seed:int=42, interactive:bool=True,**env_kwargs)->float:
+    train_env = gym.make(env_name, **env_kwargs)
     agent = Walker(train_env.observation_space.n, train_env.action_space.n)
     train(agent, train_env, round, seed, verbose=interactive)
     train_env.close()
 
-    test_env = gym.make(env_name, render_mode="human") if interactive else train_env
+    test_env = gym.make(env_name, render_mode="human", **env_kwargs) if interactive else train_env
     tre = test(agent, test_env, seed, interactive)
     test_env.close()
     return tre
